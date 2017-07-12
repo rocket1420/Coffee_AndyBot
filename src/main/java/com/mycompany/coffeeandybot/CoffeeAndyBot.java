@@ -20,7 +20,9 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
  * @author turi
  */
 public class CoffeeAndyBot extends TelegramLongPollingBot {
-
+	
+	String user = "";
+	String welcomeMessage = "";
     // Este método debe devolver el token de nuestro bot para que 
     // conecte de manera correcta con telegram y pueda manejar los mensajes
     @Override
@@ -40,9 +42,14 @@ public class CoffeeAndyBot extends TelegramLongPollingBot {
                 String welcomeMessage = "Bienvenido al grupo Java Studio: ";
 
                 for (User newUser : newUsers) {
-                    String user = newUser.getUserName().equals("null") ? newUser.getFirstName()
-                            : "@" + newUser.getUserName();
+                    try{
+                		user = newUser.getUserName().equals("null") ? newUser.getFirstName()
+                            : "http://t.me/" + newUser.getUserName();
                     welcomeMessage += user + " ";
+                    }catch(java.lang.NullPointerException e){
+                    	user = newUser.getFirstName();
+                    	welcomeMessage += user + " ";
+                    }
                 }
                 SendMessage welcomeSendMessage = new SendMessage()
                         .setChatId(message.getChatId())
